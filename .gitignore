@@ -1,0 +1,4 @@
+ARCHIVE/
+.mypy_cache/
+.env
+

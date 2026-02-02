@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Timothy Bryant Jr. | SRE</title>
+  <meta name="description"
+    content="Timothy Bryant Jr. — Site Reliability Engineer. Reliability, observability, automation. Also into PC gaming." />
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%2366e3ff' d='M10 46V18h44v28H10zm6-6h32V24H16v16z'/%3E%3Cpath fill='%23a78bfa' d='M24 50h16v6H24z'/%3E%3C/svg%3E" />
+</head>
+
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html" aria-label="Home">
+        <img class="logo" src="./assets/timothy-bryant.png" alt="Timothy Bryant Jr." />
+        <span class="brand-title">
+          <strong>Timothy Bryant Jr.</strong>
+          <span class="mono">SRE • Reliability • PC Gaming</span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="./index.html" aria-current="page">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./projects.html">Projects</a>
+        <a href="./writing.html">Writing</a>
+        <a href="./contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <h1>Keeping systems boring.</h1>
+          <p class="lede">
+            I’m a Site Reliability Engineer who likes clean automation, useful observability, and calm incident
+            response.
+            When I’m off-call, I’m usually playing PC games or tinkering in the homelab.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn primary" href="./projects.html">View projects</a>
+            <a class="btn" href="./writing.html">Medium writing</a>
+            <a class="btn" href="./contact.html">Contact</a>
+          </div>
+
+          <div class="badges" aria-label="Status badges">
+            <span class="badge"><span id="status-badge-dot" class="badge-dot" aria-hidden="true"></span><span
+                id="status-badge-text">Status: Operational</span></span>
+            <span id="status-services-badge" class="badge">Services: --/-- up</span>
+            <span class="badge">Primary region: us-east</span>
+            <!-- <span class="badge">Paging: muted (for now)</span> -->
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <div class="section-title">
+              <h2>Today’s reliability snapshot</h2>
+              <p class="mono">SLO-ish, but personal</p>
+            </div>
+
+            <div class="kpi" role="list">
+              <div class="metric" role="listitem">
+                <div class="metric-label">Availability target</div>
+                <div class="metric-value"><strong id="metric-availability-target">99.95%</strong></div>
+              </div>
+              <div class="metric" role="listitem">
+                <div class="metric-label">Error budget</div>
+                <div class="metric-value"><strong id="metric-error-budget">Healthy</strong></div>
+              </div>
+              <div class="metric" role="listitem">
+                <div class="metric-label">On-call principle</div>
+                <div class="metric-value"><strong>Automate the pain</strong></div>
+              </div>
+              <div class="metric" role="listitem">
+                <div class="metric-label">Preferred telemetry</div>
+                <div class="metric-value"><strong>Metrics + Traces</strong></div>
+              </div>
+            </div>
+
+            <div class="cta-row" style="margin-top:14px">
+              <a class="btn" href="./about.html">More about me</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <h2>What I work on</h2>
+          <p>Reliability themes, not buzzwords.</p>
+        </div>
+
+        <div class="grid">
+          <div class="tile col-4">
+            <h3>Observability</h3>
+            <p>Signals that are actionable: SLOs, dashboards that answer questions, and alerting that respects humans.
+            </p>
+          </div>
+          <div class="tile col-4">
+            <h3>Automation</h3>
+            <p>Small tools that remove toil: scripts, pipelines, and guardrails that make the “right way” the easy way.
+            </p>
+          </div>
+          <div class="tile col-4">
+            <h3>Platform hygiene</h3>
+            <p>Keeping the basics solid: patching, backups, change management, and incident learning that sticks.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <h2>Quick links</h2>
+          <p>Places I’m active.</p>
+        </div>
+
+        <div class="grid">
+          <div class="tile col-6">
+            <h3>GitHub</h3>
+            <p><a class="mono" href="https://github.com/timmyb824" rel="me">github.com/timmyb824</a></p>
+          </div>
+          <div class="tile col-6">
+            <h3>LinkedIn</h3>
+            <p><a class="mono" href="https://linkedin.com/in/timmyb824" rel="me">linkedin.com/in/timmyb824</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span class="mono">2026</span> Timothy Bryant Jr.</div>
+      <div class="mono">Built with plain HTML/CSS • Deployed via GitHub Actions</div>
+    </div>
+  </footer>
+  <script defer src="./assets/status.js"></script>
+</body>
+
+</html>

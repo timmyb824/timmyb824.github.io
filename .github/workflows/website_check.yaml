@@ -1,0 +1,33 @@
+name: URL Health Check
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  check_url:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check URL
+        id: url_check
+        run: |
+          response=$(curl -sS -o /dev/null -w "%{http_code}" https://timothybryantjr.com)
+          if [ $response -eq 200 ]; then
+            echo "URL_STATUS=🟢 Up" >> $GITHUB_ENV
+          else
+            echo "URL_STATUS=🔴 Down" >> $GITHUB_ENV
+          fi
+
+      - name: Update README
+        run: |
+          sed -i 's/<!-- URL_STATUS -->.*<!-- \/URL_STATUS -->/<!-- URL_STATUS -->${{ env.URL_STATUS }}<!-- \/URL_STATUS -->/' README.md
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add README.md
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update URL status" && git push)
