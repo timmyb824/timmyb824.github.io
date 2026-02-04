@@ -27,49 +27,65 @@ def _text(el, tag: str) -> str:  # sourcery skip: assign-if-exp, reintroduce-els
 def main() -> None:
     """Generate a JSON file containing the latest Medium posts."""
     feed_url = "https://medium.com/feed/@timmyb824"
-
-    req = urllib.request.Request(
-        feed_url,
-        headers={
-            "User-Agent": "timothybryantjr-site-medium/1.0",
-            "Accept": "application/rss+xml,application/xml;q=0.9,*/*;q=0.8",
-        },
-        method="GET",
-    )
-
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        xml_bytes = resp.read()
-
-    root = ET.fromstring(xml_bytes)
-
-    channel = root.find("channel")
-    if channel is None:
-        raise RuntimeError("Invalid Medium RSS: missing channel")
-
     items = []
-    for item in channel.findall("item"):
-        title = _text(item, "title")
-        link = _text(item, "link")
-        pub_date = _text(item, "pubDate")
-        description = _strip_html(_text(item, "description"))
+    error_msg = None
 
-        if not title or not link:
-            continue
-
-        items.append(
-            {
-                "title": title,
-                "url": link,
-                "published": pub_date,
-                "summary": description[:240] + ("…" if len(description) > 240 else ""),
-            }
+    try:
+        req = urllib.request.Request(
+            feed_url,
+            headers={
+                "User-Agent": "timothybryantjr-site-medium/1.0",
+                "Accept": "application/rss+xml,application/xml;q=0.9,*/*;q=0.8",
+            },
+            method="GET",
         )
+
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            xml_bytes = resp.read()
+
+        root = ET.fromstring(xml_bytes)
+
+        channel = root.find("channel")
+        if channel is None:
+            raise RuntimeError("Invalid Medium RSS: missing channel")
+
+        for item in channel.findall("item"):
+            title = _text(item, "title")
+            link = _text(item, "link")
+            pub_date = _text(item, "pubDate")
+            description = _strip_html(_text(item, "description"))
+
+            if not title or not link:
+                continue
+
+            items.append(
+                {
+                    "title": title,
+                    "url": link,
+                    "published": pub_date,
+                    "summary": description[:240] + ("…" if len(description) > 240 else ""),
+                }
+            )
+
+        items = items[:10]
+
+    except urllib.error.HTTPError as e:
+        error_msg = f"HTTP error {e.code}: {e.reason}"
+    except urllib.error.URLError as e:
+        error_msg = f"Network error: {e.reason}"
+    except ET.ParseError as e:
+        error_msg = f"XML parse error: {e}"
+    except Exception as e:
+        error_msg = f"Unexpected error: {e}"
 
     out = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "profile_url": "https://medium.com/@timmyb824",
-        "items": items[:10],
+        "items": items,
     }
+
+    if error_msg:
+        out["error"] = error_msg
 
     with open("site/medium.json", "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)
