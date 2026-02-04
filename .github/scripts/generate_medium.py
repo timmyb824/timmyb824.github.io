@@ -26,7 +26,7 @@ def _text(el, tag: str) -> str:  # sourcery skip: assign-if-exp, reintroduce-els
 
 def main() -> None:
     """Generate a JSON file containing the latest Medium posts."""
-    feed_url = "https://medium.com/feed/@timmyb824"
+    feed_url = "https://medium.com/feed/@tiomothybryant3"
 
     req = urllib.request.Request(
         feed_url,
