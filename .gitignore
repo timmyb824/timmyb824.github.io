@@ -1,4 +1,7 @@
 ARCHIVE/
 .mypy_cache/
 .env
+__pycache__/
+*.pyc
+site/medium.json
 
