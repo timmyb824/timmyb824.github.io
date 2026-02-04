@@ -15,6 +15,7 @@ def _env(name: str) -> str:
 
 
 def check_url(url: str, timeout_s: float = 7.0) -> dict:
+    """Check the status of a URL."""
     start = time.perf_counter()
     try:
         req = urllib.request.Request(
@@ -40,6 +41,7 @@ def check_url(url: str, timeout_s: float = 7.0) -> dict:
 
 
 def main() -> None:
+    """Main function."""
     services = [
         {"id": "auth", "label": "auth", "env": "STATUS_AUTH_URL"},
         {"id": "grafana", "label": "grafana", "env": "STATUS_GRAFANA_URL"},
@@ -74,7 +76,6 @@ def main() -> None:
 
     availability_pct = round((up / total) * 100.0, 2)
 
-    # A friendly, simple mapping. You can replace this with real SLO math later.
     target_availability_pct = 99.95
     if availability_pct >= 99.0:
         budget = "Healthy"

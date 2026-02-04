@@ -32,6 +32,10 @@ jobs:
           STATUS_IMMICH_URL: ${{ secrets.STATUS_IMMICH_URL }}
         run: python3 .github/scripts/generate_status.py
 
+      - name: Generate medium.json
+        continue-on-error: true
+        run: python3 .github/scripts/generate_medium.py
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
