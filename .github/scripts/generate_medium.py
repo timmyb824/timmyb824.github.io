@@ -26,7 +26,7 @@ def _text(el, tag: str) -> str:  # sourcery skip: assign-if-exp, reintroduce-els
 
 def main() -> None:
     """Generate a JSON file containing the latest Medium posts."""
-    feed_url = "https://medium.com/feed/@timmyb824"
+    feed_url = "https://medium.com/feed/@tiomothybryant3"
     items = []
     error_msg = None
 
@@ -63,7 +63,8 @@ def main() -> None:
                     "title": title,
                     "url": link,
                     "published": pub_date,
-                    "summary": description[:240] + ("…" if len(description) > 240 else ""),
+                    "summary": description[:240]
+                    + ("…" if len(description) > 240 else ""),
                 }
             )
 
