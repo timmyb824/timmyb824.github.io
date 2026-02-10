@@ -81,7 +81,7 @@ def main() -> None:
 
     out = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "profile_url": "https://medium.com/@timmyb824",
+        "profile_url": "https://medium.com/@tiomothybryant3",
         "items": items,
     }
 
