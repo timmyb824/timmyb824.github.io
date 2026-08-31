@@ -55,43 +55,38 @@
             <a class="btn" href="./contact.html">Contact</a>
           </div>
 
-          <div class="badges" aria-label="Status badges">
-            <span class="badge"><span id="status-badge-dot" class="badge-dot" aria-hidden="true"></span><span
-                id="status-badge-text">Status: Operational</span></span>
-            <span id="status-services-badge" class="badge">Services: --/-- up</span>
-            <span class="badge">Primary region: us-east</span>
-            <!-- <span class="badge">Paging: muted (for now)</span> -->
-          </div>
         </div>
 
         <div class="card">
           <div class="card-inner">
             <div class="section-title">
               <h2>Today’s reliability snapshot</h2>
-              <p class="mono">SLO-ish, but personal</p>
+              <p class="mono">Live from the homelab</p>
             </div>
 
             <div class="kpi" role="list">
+              <div class="metric" role="listitem">
+                <div class="metric-label">Status</div>
+                <div class="metric-value metric-status"><span id="metric-status-dot" class="badge-dot"
+                    aria-hidden="true"></span><strong id="metric-status-text">Loading…</strong></div>
+              </div>
+              <div class="metric" role="listitem">
+                <div class="metric-label">Fleet</div>
+                <div class="metric-value"><strong id="metric-fleet">--/-- up</strong></div>
+              </div>
               <div class="metric" role="listitem">
                 <div class="metric-label">Availability target</div>
                 <div class="metric-value"><strong id="metric-availability-target">99.95%</strong></div>
               </div>
               <div class="metric" role="listitem">
-                <div class="metric-label">Error budget</div>
-                <div class="metric-value"><strong id="metric-error-budget">Healthy</strong></div>
-              </div>
-              <div class="metric" role="listitem">
-                <div class="metric-label">On-call principle</div>
-                <div class="metric-value"><strong>Automate the pain</strong></div>
-              </div>
-              <div class="metric" role="listitem">
-                <div class="metric-label">Preferred telemetry</div>
-                <div class="metric-value"><strong>Metrics + Traces</strong></div>
+                <div class="metric-label">Last updated</div>
+                <div class="metric-value"><strong id="metric-last-updated">…</strong></div>
               </div>
             </div>
 
             <div class="cta-row" style="margin-top:14px">
               <a class="btn" href="./about.html">More about me</a>
+              <a class="btn" href="./status.html">View live status →</a>
             </div>
           </div>
         </div>
