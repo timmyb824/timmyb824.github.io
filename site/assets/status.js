@@ -1,4 +1,8 @@
+/* Homepage status badges: live data from the public homelab live-status API.
+   Fails silently and keeps the static UI when the API is unreachable. */
 (function () {
+  var API = "https://status.timmybtech.com";
+
   function setBadgeText(el, text) {
     if (!el) return;
     el.textContent = text;
@@ -29,45 +33,44 @@
     return "Operational";
   }
 
-  fetch("./status.json", { cache: "no-store" })
+  fetch(API + "/api/v1/status", { cache: "no-store" })
     .then(function (r) {
-      if (!r.ok) throw new Error("status.json fetch failed");
+      if (!r.ok) throw new Error("status fetch failed");
       return r.json();
     })
     .then(function (data) {
-      var overall = (data && data.overall) || "operational";
+      var services = (data && data.services) || [];
+      var hosts = (data && data.hosts) || [];
+      var nodes = (data && data.nodes) || [];
+      var all = services.concat(hosts, nodes);
+      var up = all.filter(function (i) {
+        return i.status === "up";
+      }).length;
+      /* An empty snapshot (collector wrote nothing) is never "operational". */
+      var overall =
+        all.length > 0 && up === all.length ? "operational" : "degraded";
 
       setBadgeText(
         document.getElementById("status-badge-text"),
-        "Status: " + overallLabel(overall)
+        "Status: " + overallLabel(overall),
+      );
+      /* Error budget reflects the live roll-up (the 99.95% target above it
+         is aspirational and correctly static). */
+      setBadgeText(
+        document.getElementById("metric-error-budget"),
+        overall === "operational" ? "Healthy" : "Spending",
       );
       setDotState(document.getElementById("status-badge-dot"), overall);
-
-      if (data && data.summary) {
-        if (typeof data.summary.target_availability_pct === "number") {
-          setBadgeText(
-            document.getElementById("metric-availability-target"),
-            data.summary.target_availability_pct.toFixed(2) + "%"
-          );
-        }
-
-        if (data.summary.error_budget) {
-          setBadgeText(
-            document.getElementById("metric-error-budget"),
-            String(data.summary.error_budget)
-          );
-        }
-
-        if (
-          typeof data.summary.up === "number" &&
-          typeof data.summary.total === "number"
-        ) {
-          setBadgeText(
-            document.getElementById("status-services-badge"),
-            "Services: " + data.summary.up + "/" + data.summary.total + " up"
-          );
-        }
-      }
+      setBadgeText(
+        document.getElementById("status-services-badge"),
+        "Services: " +
+          services.filter(function (s) {
+            return s.status === "up";
+          }).length +
+          "/" +
+          services.length +
+          " up",
+      );
     })
     .catch(function () {
       // Fail silently; keep the static UI.
