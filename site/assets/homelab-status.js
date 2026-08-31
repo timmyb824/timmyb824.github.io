@@ -112,7 +112,7 @@
   function nodeAge(iso) {
     var then = new Date(iso).getTime();
     if (isNaN(then)) return null;
-    var days = Math.floor((Date.now() - then) / 86400000);
+    var days = Math.floor(Math.max(0, Date.now() - then) / 86400000);
     if (days >= 365) return (days / 365).toFixed(1) + "y old";
     return days + "d old";
   }
