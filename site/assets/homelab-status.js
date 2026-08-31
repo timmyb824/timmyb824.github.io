@@ -107,6 +107,16 @@
     );
   }
 
+  /* k3s nodes: age since cluster join (k8s API has no OS uptime).
+     Proxmox nodes: platform uptime. */
+  function nodeAge(iso) {
+    var then = new Date(iso).getTime();
+    if (isNaN(then)) return null;
+    var days = Math.floor((Date.now() - then) / 86400000);
+    if (days >= 365) return (days / 365).toFixed(1) + "y old";
+    return days + "d old";
+  }
+
   function nodeRow(n) {
     var meta = [];
     if (n.role) meta.push(pill(n.role));
@@ -119,6 +129,8 @@
           (n.uptime_seconds / 86400).toFixed(1) + "d uptime",
         ),
       );
+    } else if (n.created_at) {
+      meta.push(make("span", "mono", nodeAge(n.created_at)));
     }
     return row(make("span", null, n.name), n.status, meta);
   }
@@ -252,9 +264,7 @@
     /* Generation guard: if a slower previous load resolves after a newer
        one, its stale snapshot is ignored instead of clobbering the page. */
     var gen = ++requestGen;
-    var statusReq = fetchWithTimeout(API + "/api/v1/status").then(function (
-      r,
-    ) {
+    var statusReq = fetchWithTimeout(API + "/api/v1/status").then(function (r) {
       if (!r.ok) throw new Error("status " + r.status);
       return r.json();
     });
