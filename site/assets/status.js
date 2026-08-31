@@ -3,6 +3,7 @@
    instead of leaving stale placeholders. */
 (function () {
   var API = "https://status.timmybtech.com";
+  var TIMEOUT_MS = 10000;
 
   function el(id) {
     return document.getElementById(id);
@@ -56,8 +57,17 @@
     setText("metric-last-updated", "unknown");
   }
 
-  fetch(API + "/api/v1/status", { cache: "no-store" })
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function () {
+    controller.abort();
+  }, TIMEOUT_MS);
+
+  fetch(API + "/api/v1/status", {
+    cache: "no-store",
+    signal: controller.signal,
+  })
     .then(function (r) {
+      clearTimeout(timeoutId);
       if (!r.ok) throw new Error("status fetch failed");
       return r.json();
     })
@@ -82,6 +92,7 @@
       );
     })
     .catch(function () {
+      clearTimeout(timeoutId);
       renderUnavailable();
     });
 })();
