@@ -1,24 +1,21 @@
 /* Homelab status page: polls the public live-status API and renders the
-   four tiers (nodes, hosts, services, events). Read-only, no-store. */
+   four tiers (nodes, hosts, services, events). Read-only, no-store.
+   All API data is rendered via textContent — never innerHTML. */
 (function () {
   var API = window.HLS_API || "https://status.timmybtech.com";
   var REFRESH_MS = 60000;
   var MAX_EVENTS = 25;
+  var requestGen = 0;
 
   function el(id) {
     return document.getElementById(id);
   }
 
-  function esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      }[c];
-    });
+  function make(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text != null) node.textContent = text;
+    return node;
   }
 
   function timeAgo(iso) {
@@ -33,105 +30,94 @@
   }
 
   function dot(status) {
-    var cls = status === "up" ? "up" : "down";
-    return '<span class="stat-dot ' + cls + '" aria-hidden="true"></span>';
+    return make("span", "stat-dot " + (status === "up" ? "up" : "down"));
+  }
+
+  function pill(text) {
+    return make("span", "pill", text);
   }
 
   function upSince(entity) {
     return entity.up_since ? "up since " + timeAgo(entity.up_since) : "";
   }
 
+  /* Only http(s) URLs become links — anything else renders as plain text
+     so a malformed/compromised API value can't emit a javascript: URL. */
+  function safeLink(url, name) {
+    if (!/^https?:\/\//i.test(url || "")) return null;
+    var a = make("a", null, name);
+    a.href = url;
+    a.rel = "noopener";
+    return a;
+  }
+
+  function row(nameNode, status, metaNodes) {
+    var div = make("div", "stat-row");
+    if (status) div.appendChild(dot(status)); // events have no up/down dot
+    var nameSpan = make("span", "stat-name");
+    nameSpan.appendChild(nameNode);
+    div.appendChild(nameSpan);
+    var meta = make("span", "stat-meta");
+    (metaNodes || []).forEach(function (n) {
+      meta.appendChild(n);
+    });
+    div.appendChild(meta);
+    return div;
+  }
+
   function serviceRow(s) {
     var meta = [];
     if (s.platform && s.platform.argocd) {
-      meta.push(
-        '<span class="pill">' +
-          esc(s.platform.argocd.sync) +
-          "/" +
-          esc(s.platform.argocd.health) +
-          "</span>",
-      );
+      meta.push(pill(s.platform.argocd.sync + "/" + s.platform.argocd.health));
     }
     var since = upSince(s);
-    if (since) meta.push('<span class="mono">' + esc(since) + "</span>");
-    var name = esc(s.name);
-    if (s.url) {
-      name = '<a href="' + esc(s.url) + '" rel="noopener">' + name + "</a>";
-    }
-    return (
-      '<div class="stat-row">' +
-      dot(s.status) +
-      '<span class="stat-name">' +
-      name +
-      "</span>" +
-      '<span class="stat-meta">' +
-      meta.join(" ") +
-      "</span></div>"
+    if (since) meta.push(make("span", "mono", since));
+    return row(
+      safeLink(s.url, s.name) || make("span", null, s.name),
+      s.status,
+      meta,
     );
   }
 
   function hostRow(h) {
-    var since = upSince(h);
-    return (
-      '<div class="stat-row">' +
-      dot(h.status) +
-      '<span class="stat-name">' +
-      esc(h.name) +
-      "</span>" +
-      '<span class="stat-meta mono">' +
-      esc(since) +
-      "</span></div>"
+    return row(
+      make("span", null, h.name),
+      h.status,
+      upSince(h) ? [make("span", "mono", upSince(h))] : [],
     );
   }
 
   function nodeRow(n) {
     var meta = [];
-    if (n.role) meta.push('<span class="pill">' + esc(n.role) + "</span>");
-    meta.push(
-      '<span class="pill">' +
-        (n.type === "proxmox_node" ? "proxmox" : "k3s") +
-        "</span>",
-    );
+    if (n.role) meta.push(pill(n.role));
+    meta.push(pill(n.type === "proxmox_node" ? "proxmox" : "k3s"));
     if (n.uptime_seconds != null) {
       meta.push(
-        '<span class="mono">' +
-          (n.uptime_seconds / 86400).toFixed(1) +
-          "d uptime</span>",
+        make(
+          "span",
+          "mono",
+          (n.uptime_seconds / 86400).toFixed(1) + "d uptime",
+        ),
       );
     }
-    return (
-      '<div class="stat-row">' +
-      dot(n.status) +
-      '<span class="stat-name">' +
-      esc(n.name) +
-      "</span>" +
-      '<span class="stat-meta">' +
-      meta.join(" ") +
-      "</span></div>"
-    );
+    return row(make("span", null, n.name), n.status, meta);
   }
 
   function eventRow(e) {
-    return (
-      '<div class="stat-row">' +
-      '<span class="pill">' +
-      esc(e.type) +
-      "</span>" +
-      '<span class="stat-name">' +
-      esc(e.summary) +
-      "</span>" +
-      '<span class="stat-meta mono">' +
-      esc(timeAgo(e.timestamp)) +
-      "</span></div>"
-    );
+    return row(make("span", null, e.summary), null, [
+      pill(e.type),
+      make("span", "mono", timeAgo(e.timestamp)),
+    ]);
   }
 
   function renderList(id, items, rowFn, emptyText) {
     var target = el(id);
     if (!target) return;
-    target.innerHTML = items.length
-      ? items.map(rowFn).join("")
-      : "<p>" + esc(emptyText) + "</p>";
+    if (!items.length) {
+      target.replaceChildren(make("p", null, emptyText));
+      return;
+    }
+    target.replaceChildren.apply(target, items.map(rowFn));
   }
 
   function upCount(items) {
@@ -210,11 +196,12 @@
       el("infra-summary").textContent =
         "Infra: " + infraUp + "/" + infra.length + " up";
 
-    setOverall(
-      svcUp === services.length && infraUp === infra.length
-        ? "operational"
-        : "degraded",
-    );
+    /* An empty snapshot (collector wrote nothing) is never "operational". */
+    var allUp =
+      svcUp === services.length &&
+      infraUp === infra.length &&
+      services.length + infra.length > 0;
+    setOverall(allUp ? "operational" : "degraded");
 
     var failed = Object.keys(snapshot.sources || {}).filter(function (name) {
       return !snapshot.sources[name].ok;
@@ -242,20 +229,39 @@
   }
 
   function load() {
-    Promise.all([
-      fetch(API + "/api/v1/status", { cache: "no-store" }).then(function (r) {
+    /* Generation guard: if a slower previous load resolves after a newer
+       one, its stale snapshot is ignored instead of clobbering the page. */
+    var gen = ++requestGen;
+    var statusReq = fetch(API + "/api/v1/status", { cache: "no-store" }).then(
+      function (r) {
         if (!r.ok) throw new Error("status " + r.status);
         return r.json();
-      }),
-      fetch(API + "/api/v1/events", { cache: "no-store" }).then(function (r) {
+      },
+    );
+    /* Events are optional: a failed events fetch must not take down the
+       whole page — render the snapshot without the feed. */
+    var eventsReq = fetch(API + "/api/v1/events", { cache: "no-store" })
+      .then(function (r) {
         if (!r.ok) throw new Error("events " + r.status);
         return r.json();
-      }),
-    ])
+      })
+      .catch(function () {
+        return [];
+      });
+    statusReq
+      .then(function (snapshot) {
+        return eventsReq.then(function (events) {
+          return [snapshot, events];
+        });
+      })
       .then(function (results) {
+        if (gen !== requestGen) return; // a newer load already rendered
         render(results[0], results[1]);
       })
-      .catch(renderUnreachable);
+      .catch(function (err) {
+        if (gen !== requestGen) return;
+        renderUnreachable(err);
+      });
   }
 
   load();

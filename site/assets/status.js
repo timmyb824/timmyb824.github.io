@@ -46,11 +46,19 @@
       var up = all.filter(function (i) {
         return i.status === "up";
       }).length;
-      var overall = up === all.length ? "operational" : "degraded";
+      /* An empty snapshot (collector wrote nothing) is never "operational". */
+      var overall =
+        all.length > 0 && up === all.length ? "operational" : "degraded";
 
       setBadgeText(
         document.getElementById("status-badge-text"),
         "Status: " + overallLabel(overall),
+      );
+      /* Error budget reflects the live roll-up (the 99.95% target above it
+         is aspirational and correctly static). */
+      setBadgeText(
+        document.getElementById("metric-error-budget"),
+        overall === "operational" ? "Healthy" : "Spending",
       );
       setDotState(document.getElementById("status-badge-dot"), overall);
       setBadgeText(
