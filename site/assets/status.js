@@ -1,11 +1,17 @@
-/* Homepage status badges: live data from the public homelab live-status API.
-   Fails silently and keeps the static UI when the API is unreachable. */
+/* Homepage reliability snapshot card: live data from the public homelab
+   live-status API. Shows an explicit "Unavailable" state on fetch failure
+   instead of leaving stale placeholders. */
 (function () {
   var API = "https://status.timmybtech.com";
+  var TIMEOUT_MS = 10000;
 
-  function setBadgeText(el, text) {
-    if (!el) return;
-    el.textContent = text;
+  function el(id) {
+    return document.getElementById(id);
+  }
+
+  function setText(id, text) {
+    var node = el(id);
+    if (node) node.textContent = text;
   }
 
   function setDotState(dot, state) {
@@ -33,8 +39,35 @@
     return "Operational";
   }
 
-  fetch(API + "/api/v1/status", { cache: "no-store" })
+  function timeAgo(iso) {
+    var then = new Date(iso).getTime();
+    if (isNaN(then)) return "unknown";
+    var mins = Math.max(0, Math.round((Date.now() - then) / 60000));
+    if (mins < 1) return "just now";
+    if (mins < 60) return mins + "m ago";
+    var hours = Math.round(mins / 60);
+    if (hours < 24) return hours + "h ago";
+    return Math.round(hours / 24) + "d ago";
+  }
+
+  function renderUnavailable() {
+    setDotState(el("metric-status-dot"), "down");
+    setText("metric-status-text", "Unavailable");
+    setText("metric-fleet", "--/-- up");
+    setText("metric-last-updated", "unknown");
+  }
+
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function () {
+    controller.abort();
+  }, TIMEOUT_MS);
+
+  fetch(API + "/api/v1/status", {
+    cache: "no-store",
+    signal: controller.signal,
+  })
     .then(function (r) {
+      clearTimeout(timeoutId);
       if (!r.ok) throw new Error("status fetch failed");
       return r.json();
     })
@@ -50,29 +83,16 @@
       var overall =
         all.length > 0 && up === all.length ? "operational" : "degraded";
 
-      setBadgeText(
-        document.getElementById("status-badge-text"),
-        "Status: " + overallLabel(overall),
-      );
-      /* Error budget reflects the live roll-up (the 99.95% target above it
-         is aspirational and correctly static). */
-      setBadgeText(
-        document.getElementById("metric-error-budget"),
-        overall === "operational" ? "Healthy" : "Spending",
-      );
-      setDotState(document.getElementById("status-badge-dot"), overall);
-      setBadgeText(
-        document.getElementById("status-services-badge"),
-        "Services: " +
-          services.filter(function (s) {
-            return s.status === "up";
-          }).length +
-          "/" +
-          services.length +
-          " up",
+      setDotState(el("metric-status-dot"), overall);
+      setText("metric-status-text", overallLabel(overall));
+      setText("metric-fleet", up + "/" + all.length + " up");
+      setText(
+        "metric-last-updated",
+        data && data.generated_at ? timeAgo(data.generated_at) : "unknown",
       );
     })
     .catch(function () {
-      // Fail silently; keep the static UI.
+      clearTimeout(timeoutId);
+      renderUnavailable();
     });
 })();

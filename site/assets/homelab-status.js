@@ -4,8 +4,28 @@
 (function () {
   var API = window.HLS_API || "https://status.timmybtech.com";
   var REFRESH_MS = 60000;
+  var TIMEOUT_MS = 10000;
   var MAX_EVENTS = 25;
   var requestGen = 0;
+
+  /* A blackholed connection never resolves or rejects on its own, which
+     would otherwise leave load() hanging past the next poll. */
+  function fetchWithTimeout(url) {
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function () {
+      controller.abort();
+    }, TIMEOUT_MS);
+    return fetch(url, { cache: "no-store", signal: controller.signal }).then(
+      function (r) {
+        clearTimeout(timeoutId);
+        return r;
+      },
+      function (err) {
+        clearTimeout(timeoutId);
+        throw err;
+      },
+    );
+  }
 
   function el(id) {
     return document.getElementById(id);
@@ -232,15 +252,15 @@
     /* Generation guard: if a slower previous load resolves after a newer
        one, its stale snapshot is ignored instead of clobbering the page. */
     var gen = ++requestGen;
-    var statusReq = fetch(API + "/api/v1/status", { cache: "no-store" }).then(
-      function (r) {
-        if (!r.ok) throw new Error("status " + r.status);
-        return r.json();
-      },
-    );
+    var statusReq = fetchWithTimeout(API + "/api/v1/status").then(function (
+      r,
+    ) {
+      if (!r.ok) throw new Error("status " + r.status);
+      return r.json();
+    });
     /* Events are optional: a failed events fetch must not take down the
        whole page — render the snapshot without the feed. */
-    var eventsReq = fetch(API + "/api/v1/events", { cache: "no-store" })
+    var eventsReq = fetchWithTimeout(API + "/api/v1/events")
       .then(function (r) {
         if (!r.ok) throw new Error("events " + r.status);
         return r.json();
