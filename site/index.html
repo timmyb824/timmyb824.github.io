@@ -1,152 +1,195 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Timothy Bryant Jr. | SRE</title>
+    <meta
+      name="description"
+      content="Timothy Bryant Jr. — Site Reliability Engineer. Reliability, observability, automation. Also into PC gaming."
+    />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%2389b4fa' d='M10 46V18h44v28H10zm6-6h32V24H16v16z'/%3E%3Cpath fill='%23cba6f7' d='M24 50h16v6H24z'/%3E%3C/svg%3E"
+    />
+    <script
+      defer
+      src="https://umami.timmybtech.com/script.js"
+      data-website-id="ece61c2a-58e9-45ee-8f66-220924fdbd28"
+    ></script>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Timothy Bryant Jr. | SRE</title>
-  <meta name="description"
-    content="Timothy Bryant Jr. — Site Reliability Engineer. Reliability, observability, automation. Also into PC gaming." />
-  <link rel="stylesheet" href="./assets/styles.css" />
-  <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%2366e3ff' d='M10 46V18h44v28H10zm6-6h32V24H16v16z'/%3E%3Cpath fill='%23a78bfa' d='M24 50h16v6H24z'/%3E%3C/svg%3E" />
-  <script defer src="https://umami.timmybtech.com/script.js"
-    data-website-id="ece61c2a-58e9-45ee-8f66-220924fdbd28"></script>
-</head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
 
-<body>
-  <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./index.html" aria-label="Home">
+          <img
+            class="logo"
+            src="./assets/timothy-bryant.png"
+            alt="Timothy Bryant Jr."
+          />
+          <span class="brand-title">
+            <strong>Timothy Bryant Jr.</strong>
+            <span class="mono"
+              >SRE • Incident Management • PC Gaming • Homelab</span
+            >
+          </span>
+        </a>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="./index.html" aria-label="Home">
-        <img class="logo" src="./assets/timothy-bryant.png" alt="Timothy Bryant Jr." />
-        <span class="brand-title">
-          <strong>Timothy Bryant Jr.</strong>
-          <span class="mono">SRE • Reliability • PC Gaming</span>
-        </span>
-      </a>
-
-      <nav class="nav" aria-label="Primary">
-        <a href="./index.html" aria-current="page">Home</a>
-        <a href="./about.html">About</a>
-        <a href="./projects.html">Projects</a>
-        <a href="./writing.html">Writing</a>
-        <a href="./contact.html">Contact</a>
-        <a href="./status.html">Status</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="content">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <h1>Keeping systems boring.</h1>
-          <p class="lede">
-            I’m a Site Reliability Engineer who likes clean automation, useful observability, and calm incident
-            response.
-            When I’m off-call, I’m usually playing PC games or tinkering in the homelab.
-          </p>
-
-          <div class="cta-row">
-            <a class="btn primary" href="./projects.html">View projects</a>
-            <a class="btn" href="./writing.html">Medium writing</a>
-            <a class="btn" href="./contact.html">Contact</a>
-          </div>
-
-        </div>
-
-        <div class="card">
-          <div class="card-inner">
-            <div class="section-title">
-              <h2>Today’s reliability snapshot</h2>
-              <p class="mono">Live from the homelab</p>
-            </div>
-
-            <div class="kpi" role="list">
-              <div class="metric" role="listitem">
-                <div class="metric-label">Status</div>
-                <div class="metric-value metric-status"><span id="metric-status-dot" class="badge-dot"
-                    aria-hidden="true"></span><strong id="metric-status-text">Loading…</strong></div>
-              </div>
-              <div class="metric" role="listitem">
-                <div class="metric-label">Fleet</div>
-                <div class="metric-value"><strong id="metric-fleet">--/-- up</strong></div>
-              </div>
-              <div class="metric" role="listitem">
-                <div class="metric-label">Availability target</div>
-                <div class="metric-value"><strong id="metric-availability-target">99.95%</strong></div>
-              </div>
-              <div class="metric" role="listitem">
-                <div class="metric-label">Last updated</div>
-                <div class="metric-value"><strong id="metric-last-updated">…</strong></div>
-              </div>
-            </div>
-
-            <div class="cta-row" style="margin-top:14px">
-              <a class="btn" href="./about.html">More about me</a>
-              <a class="btn" href="./status.html">View live status →</a>
-            </div>
-          </div>
-        </div>
+        <nav class="nav" aria-label="Primary">
+          <a href="./index.html" aria-current="page">Home</a>
+          <a href="./writing.html">Writing</a>
+          <a href="./contact.html">Contact</a>
+          <a href="./status.html">Status</a>
+        </nav>
       </div>
-    </section>
+    </header>
 
-    <section class="section">
-      <div class="container">
-        <div class="section-title">
-          <h2>What I work on</h2>
-          <p>Reliability themes, not buzzwords.</p>
-        </div>
-
-        <div class="grid">
-          <div class="tile col-4">
-            <h3>Observability</h3>
-            <p>Signals that are actionable: SLOs, dashboards that answer questions, and alerting that respects humans.
+    <main id="content">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <h1>
+              Running incidents, and building the programs that prevent them.
+            </h1>
+            <p class="lede">
+              Incident, Systems, and Reliability Engineer with more than 10
+              years of experience in incident response, reliability programs,
+              observability engineering, and automation. The day-to-day is on my
+              resume; this site is for the parts that don’t fit one: the tools I
+              build, what my homelab is doing right now, and what I’m writing
+              about. Resume available
+              <a href="#quick-links" style="text-decoration: underline">below</a
+              >.
             </p>
+
+            <div class="cta-row">
+              <a class="btn primary" href="#featured-projects">View projects</a>
+              <a class="btn" href="./writing.html">Medium writing</a>
+              <a class="btn" href="./contact.html">Contact</a>
+            </div>
           </div>
-          <div class="tile col-4">
-            <h3>Automation</h3>
-            <p>Small tools that remove toil: scripts, pipelines, and guardrails that make the “right way” the easy way.
-            </p>
+
+          <div class="card">
+            <div class="card-inner">
+              <div class="section-title">
+                <h2>Today’s reliability snapshot</h2>
+                <p class="mono">Live from the homelab</p>
+              </div>
+
+              <div class="kpi" role="list">
+                <div class="metric" role="listitem">
+                  <div class="metric-label">Status</div>
+                  <div class="metric-value metric-status">
+                    <span
+                      id="metric-status-dot"
+                      class="badge-dot"
+                      aria-hidden="true"
+                    ></span
+                    ><strong id="metric-status-text">Loading…</strong>
+                  </div>
+                </div>
+                <div class="metric" role="listitem">
+                  <div class="metric-label">Fleet</div>
+                  <div class="metric-value">
+                    <strong id="metric-fleet">--/-- up</strong>
+                  </div>
+                </div>
+                <div class="metric" role="listitem">
+                  <div class="metric-label">Availability target</div>
+                  <div class="metric-value">
+                    <strong id="metric-availability-target">99.95%</strong>
+                  </div>
+                </div>
+                <div class="metric" role="listitem">
+                  <div class="metric-label">Last updated</div>
+                  <div class="metric-value">
+                    <strong id="metric-last-updated">…</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cta-row" style="margin-top: 14px">
+                <a class="btn" href="./status.html">View live status →</a>
+              </div>
+            </div>
           </div>
-          <div class="tile col-4">
-            <h3>Incident Response</h3>
-            <p>Tooling and processes to respond to incidents with speed and confidence.</p>
+        </div>
+      </section>
+
+      <section class="section" id="featured-projects">
+        <div class="container">
+          <div class="section-title">
+            <h2>Featured projects</h2>
+            <p class="mono" id="featured-source">Live from GitHub</p>
           </div>
+
+          <div class="grid" id="featured-repos">
+            <div class="tile col-4">
+              <h3>Loading…</h3>
+              <p>Fetching repositories from GitHub.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="quick-links">
+        <div class="container">
+          <div class="section-title">
+            <h2>Quick links</h2>
+            <p>Where to find me.</p>
+          </div>
+
+          <div class="grid">
+            <div class="tile col-4">
+              <h3>GitHub</h3>
+              <p>
+                <a class="mono" href="https://github.com/timmyb824" rel="me"
+                  >github.com/timmyb824</a
+                >
+              </p>
+            </div>
+            <div class="tile col-4">
+              <h3>LinkedIn</h3>
+              <p>
+                <a
+                  class="mono"
+                  href="https://linkedin.com/in/timmyb824"
+                  rel="me"
+                  >linkedin.com/in/timmyb824</a
+                >
+              </p>
+            </div>
+            <!-- TODO: swap Drive link for self-hosted ./assets/resume.pdf once the PDF is committed to the repo -->
+            <div class="tile col-4">
+              <h3>Resume</h3>
+              <p>
+                <a
+                  class="mono"
+                  href="https://drive.google.com/file/d/1IYzkZYToUzoOPk0Pm2HXHo0cSW1rrv9o/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener"
+                  >View resume (PDF)</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>© <span class="mono">2026</span> Timothy Bryant Jr.</div>
+        <div class="mono">
+          Built with plain HTML/CSS • Deployed via GitHub Actions
         </div>
       </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-title">
-          <h2>Quick links</h2>
-          <p>Places I’m active.</p>
-        </div>
-
-        <div class="grid">
-          <div class="tile col-6">
-            <h3>GitHub</h3>
-            <p><a class="mono" href="https://github.com/timmyb824" rel="me">github.com/timmyb824</a></p>
-          </div>
-          <div class="tile col-6">
-            <h3>LinkedIn</h3>
-            <p><a class="mono" href="https://linkedin.com/in/timmyb824" rel="me">linkedin.com/in/timmyb824</a></p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>© <span class="mono">2026</span> Timothy Bryant Jr.</div>
-      <div class="mono">Built with plain HTML/CSS • Deployed via GitHub Actions</div>
-    </div>
-  </footer>
-  <script defer src="./assets/status.js"></script>
-</body>
-
+    </footer>
+    <script defer src="./assets/status.js"></script>
+    <script defer src="./assets/github.js"></script>
+  </body>
 </html>
