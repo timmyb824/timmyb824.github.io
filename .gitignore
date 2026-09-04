@@ -4,4 +4,5 @@ ARCHIVE/
 __pycache__/
 *.pyc
 site/medium.json
+.playwright-mcp/
 

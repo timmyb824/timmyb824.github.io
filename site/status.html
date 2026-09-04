@@ -9,7 +9,7 @@
     content="Live status of Timothy Bryant Jr.'s homelab — services, hosts, cluster nodes, and recent changes." />
   <link rel="stylesheet" href="./assets/styles.css" />
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%2366e3ff' d='M10 46V18h44v28H10zm6-6h32V24H16v16z'/%3E%3Cpath fill='%23a78bfa' d='M24 50h16v6H24z'/%3E%3C/svg%3E" />
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%2389b4fa' d='M10 46V18h44v28H10zm6-6h32V24H16v16z'/%3E%3Cpath fill='%23cba6f7' d='M24 50h16v6H24z'/%3E%3C/svg%3E" />
   <script defer src="https://umami.timmybtech.com/script.js"
     data-website-id="ece61c2a-58e9-45ee-8f66-220924fdbd28"></script>
 </head>
@@ -29,8 +29,6 @@
 
       <nav class="nav" aria-label="Primary">
         <a href="./index.html">Home</a>
-        <a href="./about.html">About</a>
-        <a href="./projects.html">Projects</a>
         <a href="./writing.html">Writing</a>
         <a href="./contact.html">Contact</a>
         <a href="./status.html" aria-current="page">Status</a>
@@ -65,11 +63,15 @@
         <div class="grid">
           <div class="tile col-6">
             <h3>Kubernetes <span class="mono" id="count-k8s" style="color:var(--muted)"></span></h3>
-            <div id="services-kubernetes"><p>loading…</p></div>
+            <div id="services-kubernetes">
+              <p>loading…</p>
+            </div>
           </div>
           <div class="tile col-6">
             <h3>External <span class="mono" id="count-ext" style="color:var(--muted)"></span></h3>
-            <div id="services-external"><p>loading…</p></div>
+            <div id="services-external">
+              <p>loading…</p>
+            </div>
           </div>
         </div>
       </section>
@@ -82,11 +84,15 @@
         <div class="grid">
           <div class="tile col-6">
             <h3>Hosts <span class="mono" id="count-hosts" style="color:var(--muted)"></span></h3>
-            <div id="hosts-list"><p>loading…</p></div>
+            <div id="hosts-list">
+              <p>loading…</p>
+            </div>
           </div>
           <div class="tile col-6">
             <h3>Nodes <span class="mono" id="count-nodes" style="color:var(--muted)"></span></h3>
-            <div id="nodes-list"><p>loading…</p></div>
+            <div id="nodes-list">
+              <p>loading…</p>
+            </div>
           </div>
         </div>
       </section>
@@ -97,7 +103,9 @@
           <p>newest first</p>
         </div>
         <div class="tile">
-          <div id="events-list"><p>loading…</p></div>
+          <div id="events-list">
+            <p>loading…</p>
+          </div>
         </div>
       </section>
     </div>
