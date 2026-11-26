@@ -5,4 +5,8 @@ __pycache__/
 *.pyc
 site/medium.json
 .playwright-mcp/
+.serena/
 
+# software factory runtime state
+/factory/jobs/
+/.worktrees/
